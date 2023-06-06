@@ -1,21 +1,53 @@
-#GUI_mouse1
-from tkinter import *
-class window_one:
-    def __init__(self):
-        Button(main_window,text="Quit",command=self.quit) .grid()
-        canvas.bind("<Button-1>",self.oval)
-    
-    def quit(self):
-        main_window.destroy()
+import tkinter as tk
+import requests
 
-    def oval(self,event):
-        x_val = event.x
-        y_val = event.y
-        canvas.create_oval(x_val,y_val,x_val+20,y_val+20,fill="red",outline="blue",width=5)
-        canvas.update()
+class CurrencyConverter:
+    def __init__(self, window):
+        self.window = window
+        self.window.title("Currency Converter")
 
-main_window = Tk()
-canvas = Canvas(main_window, width=400, height=300, bg='lightblue')
-canvas.grid()
-window_one()
+        self.amount_label = tk.Label(window, text="Amount:")
+        self.amount_label.pack()
+        self.amount_entry = tk.Entry(window)
+        self.amount_entry.pack()
 
+        self.from_currency_label = tk.Label(window, text="From Currency:")
+        self.from_currency_label.pack()
+        self.from_currency_entry = tk.Entry(window)
+        self.from_currency_entry.pack()
+
+        self.to_currency_label = tk.Label(window, text="To Currency:")
+        self.to_currency_label.pack()
+        self.to_currency_entry = tk.Entry(window)
+        self.to_currency_entry.pack()
+
+        self.convert_button = tk.Button(window, text="Convert", command=self.convert_currency)
+        self.convert_button.pack()
+
+        self.result_label = tk.Label(window, text="Result:")
+        self.result_label.pack()
+
+    def convert_currency(self):
+        amount = float(self.amount_entry.get())
+        from_currency = self.from_currency_entry.get().upper()
+        to_currency = self.to_currency_entry.get().upper()
+
+        url = f"https://api.exchangerate-api.com/v4/latest/{from_currency}"
+        response = requests.get(url)
+        data = response.json()
+
+        if to_currency in data["rates"]:
+            rate = data["rates"][to_currency]
+            result = amount * rate
+            self.result_label.config(text=f"Result: {result:.2f} {to_currency}")
+        else:
+            self.result_label.config(text="Invalid currency.")
+
+# Create the main window
+window = tk.Tk()
+
+# Create an instance of the CurrencyConverter class
+currency_converter = CurrencyConverter(window)
+
+# Start the main loop
+window.mainloop()
