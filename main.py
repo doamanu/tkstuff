@@ -4,7 +4,7 @@ import requests
 class CurrencyConverter:
     def __init__(self, window):
         self.window = window
-        self.window.title("Currency Converter")
+        self.window.title("Simple Currency Converter")
 
         self.amount_label = tk.Label(window, text="Amount:")
         self.amount_label.pack()
@@ -21,7 +21,7 @@ class CurrencyConverter:
         self.to_currency_entry = tk.Entry(window)
         self.to_currency_entry.pack()
 
-        self.convert_button = tk.Button(window, text="Convert", command=self.convert_currency)
+        self.convert_button = tk.Button(window, text="Convert Currency", command=self.convert_currency)
         self.convert_button.pack()
 
         self.result_label = tk.Label(window, text="Result:")
